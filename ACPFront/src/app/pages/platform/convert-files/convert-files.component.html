@@ -1,0 +1,157 @@
+<div class="w-full p-4 sm:flex items-center justify-between lg:mt-1.5">
+  <div class="w-full mb-1">
+    <div class="mb-4">
+      <nav class="flex mb-5" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+          <li class="inline-flex items-center">
+            <a
+              class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+              <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                </path>
+              </svg>
+              Home
+            </a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <a class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Convert
+                files</a>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+
+@if (stepCount == 1) {
+<form [formGroup]="formGroup" class="flex flex-col items-center justify-center w-full gap-y-6">
+  <div class="text-lg font-semibold w-full text-start">You can convert files through this page.</div>
+  <label for="dropzone-file"
+    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+      <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+        fill="none" viewBox="0 0 20 16">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+      </svg>
+      @if (!fileName) {
+        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Only Excel (i.e. .xlsx and .xls) formats are allowed. </p>
+      } @else {
+        <p class="text-lg font-bold text-gray-500 dark:text-gray-400">Selected File: <span class="text-lg font-semibold">{{ fileName }}</span></p>
+      }
+    </div>
+    <input (change)="onFileSelected($event)" formControlName="file" id="dropzone-file" type="file" class="hidden"
+      accept=".xlsx, .xls" />
+  </label>
+
+  <button (click)="onGoToStep2ButtonPressed()" [disabled]="formGroup.invalid"
+    class="text-white h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">Convert</button>
+</form>
+} @else if (stepCount == 2) {
+<div class="flex flex-col gap-y-5">
+  <div class="flex flex-col gap-y-2">
+    <div class="font-bold text-lg">Please have a look at your data before continuing to the next step.</div>
+    @if (!fileValidationHistory) {
+      <div class="font-normal text-base">If everything looks okay, click on the Next step button.</div>
+      <button (click)="onGoToStep3ButtonPressed()"
+      class="text-white w-32 h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">Next
+      step</button>
+    } @else {
+      <div class="font-normal text-base">It seems like you have already converted a similar file to the <span class="font-extrabold">{{ fileValidationHistory.targetTableName }}</span> table. Would you like to use the same mapping with the current file?</div>
+      <div class="flex items-center gap-x-3">
+        <button (click)="onGoToStep3ButtonPressed(true)"
+        class="text-white w-64 h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">Upload using the same mapping</button>
+        <button (click)="onGoToStep3ButtonPressed()"
+        class="text-white w-64 h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">Create a new mapping</button>
+
+      </div>
+    }
+  </div>
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        @for (column of fileColumns; track $index) {
+        <th scope="col" class="px-6 py-3">
+          {{ column }}
+        </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of fileContent; track $index) {
+      <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+        @for (column of fileColumns; track index; let index = $index) {
+        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          {{ row[column] }}
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+} @else if (stepCount == 3) {
+<div class="flex flex-col gap-y-5">
+  <div class="flex flex-col gap-y-1">
+    <div class="font-bold text-lg">Select the target table to map to.</div>
+    <div class="font-bold text-base">Once selected, please assign each of the table's columns to the corresponding
+      column on the Excel file.</div>
+  </div>
+  <div class="flex flex-col items-start">
+    <label for="target-table" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a target
+      table</label>
+    <select id="target-table" [formControl]="selectedTargetTableFormControl"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <option value="" selected>Choose a table</option>
+      @for (table of tablesList; track $index) {
+      <option [value]="table.name">{{ table.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (selectedTargetTableFormControl.value != '') {
+  <div class="flex flex-col gap-y-5">
+    @for (tableColumn of getSelectedTableColumn(); track $index) {
+    <div class="flex items-center gap-x-10">
+      <div class="flex flex-col gap-y-1">
+        <div>Target column name:</div>
+        <div class="font-bold">{{ tableColumn }}</div>
+      </div>
+      <div class="flex flex-col gap-y-1">
+        <div>File column name</div>
+        <select
+          (change)="onMappingChanged($event, tableColumn)"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option value="" selected>Choose a column name</option>
+          @for (fileColumn of fileColumns; track $index) {
+          <option [value]="fileColumn">{{ fileColumn }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    }
+    <button (click)="onCreateValidationRequestButtonPressed()"
+    [disabled]="isCreateValidationButtonDisabled()"
+    class="text-white w-64 h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">
+    {{ authService.isAdmin() ? 'Convert file' : 'Send Validation Request'  }}
+  </button>
+  </div>
+  }
+</div>
+} @else if (stepCount == 4) {
+  <div class="flex flex-col items-center gap-y-5">
+    <div class="font-bold text-lg">{{ authService.isAdmin() ? 'Your file has been converted successfully!' : 'Your file has been successfully sent for validation!'}}</div>
+    <button (click)="onGoToStep1ButtonPressed()"
+      class="text-white h-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed">Convert another file</button>
+  </div>
+}
