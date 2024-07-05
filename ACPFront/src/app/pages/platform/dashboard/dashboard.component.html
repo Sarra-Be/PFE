@@ -1,0 +1,77 @@
+<div class="w-full p-4 sm:flex items-center justify-between lg:mt-1.5">
+  <div class="w-full mb-1">
+    <div class="mb-4">
+      <nav class="flex mb-5" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
+          <li class="inline-flex items-center">
+            <a
+              class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
+              <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                </path>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+  <div class="sm:hidden">
+    <label for="tabs" class="sr-only">Select tab</label>
+    <select id="tabs"
+      class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <option>Statistics</option>
+      <option>Services</option>
+    </select>
+  </div>
+  <ul
+    class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400 rtl:divide-x-reverse"
+    id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+    <li class="w-full">
+      <button id="stats-tab" data-tabs-target="#stats" type="button" role="tab" aria-controls="stats"
+        aria-selected="true"
+        class="inline-block w-full p-4 rounded-ss-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Statistics</button>
+    </li>
+  </ul>
+  <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+    <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="stats" role="tabpanel"
+      aria-labelledby="stats-tab">
+      <dl
+        class="flex w-full justify-around max-w-screen-xl gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
+        <div class="flex flex-col items-center justify-center">
+          <dt class="mb-2 text-3xl font-extrabold">{{ stats.totalUsers }}</dt>
+          <dd class="text-gray-500 dark:text-gray-400">Total users</dd>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <dt class="mb-2 text-3xl font-extrabold">{{ stats.totalConversions }}</dt>
+          <dd class="text-gray-500 dark:text-gray-400">Total conversions</dd>
+        </div>
+      </dl>
+      <dl
+        class="flex w-full justify-around max-w-screen-xl gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
+        <div class="flex flex-col items-center justify-center">
+          <dt class="mb-2 text-3xl font-extrabold text-yellow-500">{{ stats.pendingConversions }}</dt>
+          <dd class="text-yellow-600">Pending conversions</dd>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <dt class="mb-2 text-3xl font-extrabold text-green-500">{{ stats.approvedConversions }}</dt>
+          <dd class="text-green-600">Approved conversions</dd>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <dt class="mb-2 text-3xl font-extrabold text-red-500">{{ stats.rejectedConversions }}</dt>
+          <dd class="text-red-600">Rejected conversions</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- <div class="w-full flex flex-col justify-center items-center">
+    <h3>Files uploaded</h3>
+    <div class="py-6" id="pie-chart"></div>
+  </div> -->
+</div>
